@@ -1,7 +1,9 @@
-// 🌍 Change this to your Render backend URL
-const API_BASE = "https://newsxstudy-backend.onrender.com/api";
+// 🌍 Auto-select API base URL
+const API_BASE = window.location.hostname.includes("localhost")
+    ? "http://localhost:5000"
+    : "https://newsxstudy-backend.onrender.com";
 
-// ✅ SIGNUP
+// ✅ DOM Elements
 const signupForm = document.getElementById('signup-form');
 const loginForm = document.getElementById('login-form');
 const logoutBtn = document.getElementById('logout-btn');
@@ -10,6 +12,7 @@ const bookmarksSection = document.getElementById('bookmarks-section');
 const studySection = document.getElementById('study-section');
 const authSection = document.getElementById('auth-section');
 
+// ✅ SIGNUP
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -18,7 +21,7 @@ signupForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('signup-password').value;
 
     try {
-        const res = await axios.post(`${API_BASE}/auth/register`, { name, email, password });
+        const res = await axios.post(`${API_BASE}/api/auth/register`, { name, email, password });
         alert(res.data.message);
         signupForm.reset();
     } catch (err) {
@@ -34,7 +37,7 @@ loginForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('login-password').value;
 
     try {
-        const res = await axios.post(`${API_BASE}/auth/login`, { email, password });
+        const res = await axios.post(`${API_BASE}/api/auth/login`, { email, password });
         const token = res.data.token;
         localStorage.setItem('token', token);
         alert('Login successful');
@@ -54,6 +57,7 @@ logoutBtn.addEventListener('click', () => {
     toggleSectionsOnLogout();
 });
 
+// 🔄 UI Toggle Functions
 function toggleSectionsOnLogin() {
     authSection.style.display = 'none';
     newsSection.style.display = 'block';
@@ -75,7 +79,7 @@ function saveBookmark(title, url) {
     const token = localStorage.getItem('token');
     if (!token) return alert('Please login to save bookmarks');
 
-    axios.post(`${API_BASE}/bookmarks/add`, { title, url }, {
+    axios.post(`${API_BASE}/api/bookmarks/add`, { title, url }, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => alert(res.data.message))
@@ -87,7 +91,7 @@ function fetchBookmarks() {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    axios.get(`${API_BASE}/bookmarks/list`, {
+    axios.get(`${API_BASE}/api/bookmarks/list`, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -113,7 +117,7 @@ function deleteBookmark(id) {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    axios.delete(`${API_BASE}/bookmarks/delete/${id}`, {
+    axios.delete(`${API_BASE}/api/bookmarks/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => fetchBookmarks())
@@ -141,7 +145,7 @@ function stopStudy() {
 
 // 🌍 Load Default News
 function loadNews() {
-    axios.get(`${API_BASE}/news`)
+    axios.get(`${API_BASE}/api/news`)
     .then(res => renderNews(res.data.articles))
     .catch(() => {
         document.getElementById('news-container').innerHTML = 'Failed to load news';
@@ -156,7 +160,7 @@ searchForm.addEventListener('submit', async (e) => {
     if (!query) return alert('Enter something to search');
 
     try {
-        const res = await axios.get(`${API_BASE}/news/search?q=${query}`);
+        const res = await axios.get(`${API_BASE}/api/news/search?q=${query}`);
         renderNews(res.data.articles);
     } catch (err) {
         alert('Search failed');
@@ -170,7 +174,7 @@ categorySelect.addEventListener('change', async (e) => {
     if (!selected) return loadNews();
 
     try {
-        const res = await axios.get(`${API_BASE}/news/category/${selected}`);
+        const res = await axios.get(`${API_BASE}/api/news/category/${selected}`);
         renderNews(res.data.articles);
     } catch (err) {
         alert('Failed to filter news');
