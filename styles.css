@@ -1,0 +1,199 @@
+/* ========== GENERAL STYLES ========== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+h1, h2, h3 {
+    color: #222;
+}
+
+section {
+    padding: 2rem;
+    border-bottom: 1px solid #ccc;
+}
+
+/* ========== NAVIGATION ========== */
+nav {
+    background-color: #0066cc;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffcc00;
+}
+
+/* ========== FORMS ========== */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+input, button, select {
+    padding: 0.7rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+button {
+    background-color: #0077cc;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #005fa3;
+}
+
+/* ========== NEWS CARDS ========== */
+.news-card {
+    background-color: white;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.news-card:hover {
+    transform: scale(1.02);
+}
+
+.news-card h3 {
+    margin-top: 0;
+}
+
+.news-card button {
+    margin-top: 0.5rem;
+    background-color: #28a745;
+}
+
+/* ========== BOOKMARKS ========== */
+#bookmark-container div {
+    background-color: #f0f8ff;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 6px;
+}
+
+#bookmark-container a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+/* ========== STUDY SECTION ========== */
+#study-planner ul {
+    list-style: disc;
+    padding-left: 2rem;
+    line-height: 1.5;
+}
+
+#study-timer {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ========== PROFILE ========== */
+#user-profile {
+    background-color: #eef6ff;
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid #b3d4fc;
+    border-radius: 5px;
+    max-width: 400px;
+}
+
+/* ========== DARK MODE ========== */
+.dark-mode {
+    background-color: #1e1e1e;
+    color: #eee;
+}
+
+.dark-mode nav {
+    background-color: #111;
+}
+
+.dark-mode nav ul li a {
+    color: #eee;
+}
+
+.dark-mode nav ul li a:hover {
+    color: #ffcc00;
+}
+
+.dark-mode .news-card,
+.dark-mode #bookmark-container div,
+.dark-mode #user-profile {
+    background-color: #2a2a2a;
+    color: #ddd;
+    border-color: #444;
+}
+
+.dark-mode button {
+    background-color: #444;
+}
+
+.dark-mode button:hover {
+    background-color: #666;
+}
+
+/* ========== SEARCH & FILTER ========== */
+#search-input, #category-select {
+    margin-right: 1rem;
+    margin-top: 1rem;
+    width: 200px;
+}
+
+@media screen and (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    #search-input, #category-select {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    html {
+  scroll-behavior: smooth;
+}
+
+}
