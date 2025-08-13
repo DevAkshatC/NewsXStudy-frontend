@@ -1,4 +1,5 @@
-const BASE_URL = 'https://newsxstudy-backend.onrender.com';
+// 🌍 Change this to your Render backend URL
+const API_BASE = "https://newsxstudy-backend.onrender.com/api";
 
 // ✅ SIGNUP
 const signupForm = document.getElementById('signup-form');
@@ -17,7 +18,7 @@ signupForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('signup-password').value;
 
     try {
-        const res = await axios.post(`${BASE_URL}/api/auth/register`, { name, email, password });
+        const res = await axios.post(`${API_BASE}/auth/register`, { name, email, password });
         alert(res.data.message);
         signupForm.reset();
     } catch (err) {
@@ -33,7 +34,7 @@ loginForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('login-password').value;
 
     try {
-        const res = await axios.post(`${BASE_URL}/api/auth/login`, { email, password });
+        const res = await axios.post(`${API_BASE}/auth/login`, { email, password });
         const token = res.data.token;
         localStorage.setItem('token', token);
         alert('Login successful');
@@ -74,7 +75,7 @@ function saveBookmark(title, url) {
     const token = localStorage.getItem('token');
     if (!token) return alert('Please login to save bookmarks');
 
-    axios.post(`${BASE_URL}/api/bookmarks/add`, { title, url }, {
+    axios.post(`${API_BASE}/bookmarks/add`, { title, url }, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => alert(res.data.message))
@@ -86,7 +87,7 @@ function fetchBookmarks() {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    axios.get(`${BASE_URL}/api/bookmarks/list`, {
+    axios.get(`${API_BASE}/bookmarks/list`, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -96,7 +97,7 @@ function fetchBookmarks() {
             const div = document.createElement('div');
             div.innerHTML = `
                 <p><a href="${bookmark.url}" target="_blank">${bookmark.title}</a></p>
-                <button onclick="deleteBookmark('${bookmark._id}')">🔚️ Delete</button>
+                <button onclick="deleteBookmark('${bookmark._id}')">🗑️ Delete</button>
                 <hr>
             `;
             container.appendChild(div);
@@ -112,7 +113,7 @@ function deleteBookmark(id) {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    axios.delete(`${BASE_URL}/api/bookmarks/delete/${id}`, {
+    axios.delete(`${API_BASE}/bookmarks/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => fetchBookmarks())
@@ -140,7 +141,7 @@ function stopStudy() {
 
 // 🌍 Load Default News
 function loadNews() {
-    axios.get(`${BASE_URL}/api/news`)
+    axios.get(`${API_BASE}/news`)
     .then(res => renderNews(res.data.articles))
     .catch(() => {
         document.getElementById('news-container').innerHTML = 'Failed to load news';
@@ -155,7 +156,7 @@ searchForm.addEventListener('submit', async (e) => {
     if (!query) return alert('Enter something to search');
 
     try {
-        const res = await axios.get(`${BASE_URL}/api/news/search?q=${query}`);
+        const res = await axios.get(`${API_BASE}/news/search?q=${query}`);
         renderNews(res.data.articles);
     } catch (err) {
         alert('Search failed');
@@ -169,7 +170,7 @@ categorySelect.addEventListener('change', async (e) => {
     if (!selected) return loadNews();
 
     try {
-        const res = await axios.get(`${BASE_URL}/api/news/category/${selected}`);
+        const res = await axios.get(`${API_BASE}/news/category/${selected}`);
         renderNews(res.data.articles);
     } catch (err) {
         alert('Failed to filter news');
