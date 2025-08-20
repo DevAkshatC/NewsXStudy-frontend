@@ -1,115 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>News Aggregator</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        section {
-            padding: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>NewsXStudy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <nav>
-        <h1>News Aggregator</h1>
-        <ul>
-            <li><a href="#news-section" class="nav-link">News</a></li>
-            <li><a href="#bookmarks-section" class="nav-link">Bookmarks</a></li>
-            <li><a href="#study-section" class="nav-link">Study Assistant</a></li>
-            <li><a href="#auth-section" class="nav-link">Login/Signup</a></li>
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Auth (Glass Overlay, centered) -->
+  <section id="auth-section" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-header">
+        <button class="tab-btn active" data-tab="signup">Signup</button>
+        <button class="tab-btn" data-tab="login">Login</button>
+      </div>
+
+      <!-- Signup -->
+      <form id="signup-form" class="auth-form" data-tab="signup">
+        <h2>Create Account</h2>
+        <input type="text" placeholder="Name" required id="signup-name" />
+        <input type="email" placeholder="Email" required id="signup-email" />
+        <input type="password" placeholder="Password" required id="signup-password" />
+        <button type="submit" class="primary-btn">Signup</button>
+        <p class="hint">Already have an account? <a href="#" data-switch-to="login">Login</a></p>
+      </form>
+
+      <!-- Login -->
+      <form id="login-form" class="auth-form hidden" data-tab="login">
+        <h2>Welcome Back</h2>
+        <input type="email" placeholder="Email" required id="login-email" />
+        <input type="password" placeholder="Password" required id="login-password" />
+        <button type="submit" class="primary-btn">Login</button>
+        <p class="hint">No account? <a href="#" data-switch-to="signup">Create one</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- App Shell -->
+  <nav class="app-nav">
+    <h1>📰 NewsXStudy</h1>
+    <ul>
+      <li><a href="#news-section" class="nav-link">News</a></li>
+      <li><a href="#bookmarks-section" class="nav-link">Bookmarks</a></li>
+      <li><a href="#study-section" class="nav-link">Study Assistant</a></li>
+    </ul>
+    <button id="logout-btn" class="danger-btn" style="display:none;">Logout</button>
+  </nav>
+
+  <!-- News Section -->
+  <section id="news-section" class="page-section" style="display:none;">
+    <div class="toolbar">
+      <form id="search-form" class="search-box">
+        <input type="text" id="search-input" placeholder="Search news..." />
+        <button type="submit" class="primary-btn">Search</button>
+      </form>
+      <select id="category-select" class="select">
+        <option value="">All Categories</option>
+        <option value="technology">Technology</option>
+        <option value="sports">Sports</option>
+        <option value="politics">Politics</option>
+        <option value="business">Business</option>
+        <option value="entertainment">Entertainment</option>
+      </select>
+    </div>
+    <div id="news-container" class="card-grid"></div>
+  </section>
+
+  <!-- Bookmarks Section -->
+  <section id="bookmarks-section" class="page-section" style="display:none;">
+    <h2 class="section-title">Bookmarked Articles</h2>
+    <div id="bookmark-container" class="bookmark-grid"></div>
+  </section>
+
+  <!-- Study Assistant Section -->
+  <section id="study-section" class="page-section" style="display:none;">
+    <h2 class="section-title">Study Assistant</h2>
+    <div class="study-wrap">
+      <div class="glass-card">
+        <h3>Timer</h3>
+        <p id="study-timer" class="timer">Timer: 00:00</p>
+        <div class="btn-row">
+          <button class="success-btn" onclick="startStudy()">Start Study</button>
+          <button class="danger-btn" onclick="stopStudy()">Stop Study</button>
+        </div>
+      </div>
+      <div class="glass-card">
+        <h3>Your Study Plan</h3>
+        <ul id="plan-list" class="plan-list">
+          <li>📖 Revise yesterday’s notes</li>
+          <li>🧠 Solve 2 practice sets</li>
+          <li>📘 Read one new topic</li>
         </ul>
-        <button id="logout-btn" style="display: none;">Logout</button>
-    </nav>
+      </div>
+      <div class="glass-card">
+        <h3>Daily Tip</h3>
+        <p id="tip-text">Stay focused, eliminate distractions!</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Auth Section -->
-    <section id="auth-section">
-        <h2>Signup</h2>
-        <form id="signup-form">
-            <input type="text" placeholder="Name" required id="signup-name">
-            <input type="email" placeholder="Email" required id="signup-email">
-            <input type="password" placeholder="Password" required id="signup-password">
-            <button type="submit">Signup</button>
-            <p>If you don't have an account 👆</p>
-        </form>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Load particle config
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 80 },
+    "size": { "value": 3 },
+    "move": { "speed": 2 },
+    "line_linked": { "enable": true }
+  }
+});
 
-        <h2>Login</h2>
-        <form id="login-form">
-            <input type="email" placeholder="Email" required id="login-email">
-            <input type="password" placeholder="Password" required id="login-password">
-            <button type="submit">Login</button>
-            <p>Have an account? 👆</p>
-        </form>
-    </section>
-
-    <!-- News Section -->
-    <section id="news-section" style="display: none;">
-        <h2>Latest News</h2>
-        <form id="search-form">
-            <input type="text" id="search-input" placeholder="Search news...">
-            <button type="submit">Search</button>
-        </form>
-        <select id="category-select">
-            <option value="">-- Filter by Category --</option>
-            <option value="technology">Technology</option>
-            <option value="sports">Sports</option>
-            <option value="politics">Politics</option>
-            <option value="business">Business</option>
-            <option value="entertainment">Entertainment</option>
-        </select>
-        <div id="news-container"></div>
-    </section>
-
-    <!-- Bookmarks Section -->
-    <section id="bookmarks-section" style="display: none;">
-        <h2>Bookmarked Articles</h2>
-        <div id="bookmark-container"></div>
-    </section>
-
-    <!-- Study Assistant Section -->
-    <section id="study-section" style="display: none;">
-        <h2>Study Assistant</h2>
-        <div>
-            <button onclick="startStudy()">Start Study</button>
-            <button onclick="stopStudy()">Stop Study</button>
-            <p id="study-timer">Timer: 00:00</p>
-        </div>
-        <div id="study-planner">
-            <h3>Your Study Plan</h3>
-            <ul id="plan-list">
-                <li>📖 Revise yesterday’s notes</li>
-                <li>🧠 Solve 2 practice sets</li>
-                <li>📘 Read one new topic</li>
-            </ul>
-        </div>
-        <div id="daily-tip">
-            <h3>Daily Tip</h3>
-            <p id="tip-text">Stay focused, eliminate distractions!</p>
-        </div>
-    </section>
-
-    <script src="script.js"></script>
-    <script>
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                const id = link.getAttribute('href').replace('#', '');
-                ['auth-section', 'news-section', 'bookmarks-section', 'study-section'].forEach(sectionId => {
-                    document.getElementById(sectionId).style.display = sectionId === id ? 'block' : 'none';
-                });
-            });
-        });
-
-        if (localStorage.getItem('token')) {
-            document.getElementById('auth-section').style.display = 'none';
-            document.getElementById('news-section').style.display = 'block';
-            document.getElementById('bookmarks-section').style.display = 'block';
-            document.getElementById('study-section').style.display = 'block';
-            document.getElementById('logout-btn').style.display = 'inline-block';
-        }
-    </script>
+  </script>
 </body>
 </html>
+
